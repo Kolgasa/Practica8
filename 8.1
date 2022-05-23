@@ -1,78 +1,31 @@
-#include <string>
-#include <cmath>
-#include <vector>
 #include <iostream>
+#include <vector>
+#include <cmath>
 
 using namespace std;
 
-double StringToDouble(string s1) {
-	int mainpart_size = 0;
-	while (s1[mainpart_size] != '.') {
-		mainpart_size++;
-	}
-	int decpart_size = s1.size() - mainpart_size - 1;
-	bool decpart = true;
-	double k = 1, m = pow(10,-decpart_size),result=0;
-	for (int i = s1.size() - 1; i >= 0; i--) {
-		if (isdigit(s1[i]) && decpart == true) {
-			result += (s1[i] - '0') * m;
-			m *= 10;
-		}
-		else if (isdigit(s1[i]) && decpart == false) {
-			result += (s1[i] - '0') * k;
-			k *= 10;
-		}
-		else {
-			decpart = false;
-		}
-	}
+int main()
+{
+    vector <int> number;
+    string s;
+    cout << "Enter your a number with a tochka:\n";
+    cin >> s;
 
-	return result;
-}
+    for(int i=0; i < s.size(); i++) number.push_back(s[i]);
+    int tochka;
+    for(int j=0; j < number.size(); j++){
+        if(number[j] == '.') tochka = j;
+    }
+    double your_double = 0;
+    for(int left = 1; left <= tochka; left++){
+        your_double+= (number[left - 1] - 48) * pow(10,tochka - left);
+    }
+    int right = 1;
+    while (tochka + right < number.size()){
+        your_double+= (number[tochka + right] - 48) * pow(10,- right);
+        right++;
+    }
 
-vector<string> StringToVector(string s1) {
-
-	vector<string>vec;
-	for (int i = 0; i < s1.size(); i++) {
-		string to_add = "";
-		char c = s1[i];
-		if (s1[i] == '+' || s1[i] == '-' || s1[i] == '*' || s1[i] == '/') {
-			to_add += s1[i];
-		}
-		else if (isdigit(c)) {
-			while (isdigit(s1[i])) {
-				to_add += s1[i];
-				i++;
-			}
-			i--;
-		}
-		else if (isalpha(c)) {
-			while (isalpha(s1[i])) {
-				to_add += s1[i];
-				i++;
-			}
-			i--;
-		}
-		vec.push_back(to_add);
-	}
-
-	return vec;
-}
-
-
-int main() {
-	string s1 = "";
-	cin >> s1;
-
-	cout << StringToDouble(s1) << endl;
-
-	string s2;
-	cin >> s2;
-
-	vector<string>ans = StringToVector(s2);
-	for (int i = 0; i < ans.size(); i++) {
-		cout << ans[i] << ' ';
-	}
-
-return 0;
+    cout << your_double;
+    return 0;
 }
